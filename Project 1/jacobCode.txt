@@ -1,0 +1,78 @@
+**Enemy generator reads a file to generate enemies in the game*/
+public class EnemyGenerator {
+  /**enemyList generates enemies from the file read into the program*/
+  private ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
+  /**ig reads from the item file to generate enemies*/
+  private ItemGenerator ig;
+  /**EnemyGenerator is a constructor that generates enemies from the file and is
+  * created by whether the player has landed on magical enemy or regular enemy.
+  * @param ig is used to generate item within if loop for item generation
+  * @param randAdd is used to add random amount of health to new enemy
+  */
+  public EnemyGenerator(ItemGenerator ig){
+    this.ig = new ItemGenerator();
+    this.enemyList = new ArrayList<Enemy>();
+    File enemies = new File("EnemyList.txt");
+    try {
+      Scanner sc = new Scanner(enemies);
+      do {
+        Random rand = new Random();
+        int randAdd = rand.nextInt(3);
+        String line = enemy.nextLine();
+        String[] values = line.split(",");
+        String name = values[0];
+        String type = values[2];
+        int health = Integer.parseInt(values[1]) + randAdd;
+        
+        if (type.equals("m")){
+          MagicalEnemy me = new MagicalEnemy(name, health, ig.generateItem());
+          this.enemyList.add(me);
+        } else {
+          Enemy e = new Enemy(name, health, ig.generateItem());
+          this.enemyList.add(e);
+        }
+      } while (sc.hasNextLine());
+      sc.close();
+    } catch (FileNotFoundException n){
+        System.out.println("File Not Found");
+    }
+  }
+  /** generateEnemy is a method that chooses a enemy randomy from EnemyList.txt
+  * @return the enemy that is randomly selected from EnemyList.txt
+  */
+  public Enemy generateEnemy(int level){
+    Random ran = new Random();
+    int rand = ran.nextInt(this.enemyList.size());
+    Enemy e = new Enemy(this.enemyList.get(rand).getName(), this.enemyList.get(rand).getMaxHP(), this.enemyList.get(rand).getItem());
+
+    return e;
+  }
+}
+
+
+public class ItemGenerator {
+  private ArrayList<item> itemList;
+
+  public ItemGenerator(){
+    itemList = new ArrayList<Item>();
+    File list = new File("ItemList.txt");
+    try {
+      Scanner sc = new Scanner(list);
+      do {
+        String line = items.nextLine();
+        Item item = new Item(line);
+        this.itemList.add(item);
+      } while(sc.hasNextLine());
+        sc.close();
+    } catch(FileNotFoundException n) {
+        System.out.println("File is not found");
+    }
+  }
+  public Item generateItem(){ 
+    Random ran = new Random();
+    int rand = ran.nextInt(this.itemList.size());
+    Item i = new Item(itemList.get(rand).getName());
+
+    return i; 
+  }
+}
